@@ -86,11 +86,25 @@ void bubble_sort(char nomes[][TAM_NOME]){
 }
 
 void selection_sort(char nomes[][TAM_NOME]){
-
+    for(int i = 0; i < (QTD_LINHAS - 1); i++){
+        for(int j = i + 1; j < QTD_LINHAS; j++){
+            if(strcmp(nomes[i], nomes[j]) > 0){
+                trocar(nomes, i, j);
+            }
+        }
+    }
 }
 
 void insertion_sort(char nomes[][TAM_NOME]){
-
+    int j = 0;
+    char *key;
+    for(int i = 1; i < QTD_LINHAS; i++){
+        strcpy(key, nomes[i]);
+        for(j = i - 1; j >= 0 && (strcmp(nomes[j], key) > 0); j--){
+            strcpy(nomes[j + 1], nomes[j]);
+        }
+        strcpy(nomes[j + 1], key);
+    }
 }
 
 void merge_sort(char nomes[][TAM_NOME]){
