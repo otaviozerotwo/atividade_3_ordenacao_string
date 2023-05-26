@@ -45,21 +45,21 @@ void mostrar_menu(char nomes[][TAM_NOME]){
         case 1:
             bubble_sort(nomes);
             mostrar_nomes(nomes);
-            exit(0);
+            break;
         case 2:
             selection_sort(nomes);
             mostrar_nomes(nomes);
-            exit(0);
+            break;
         case 3:
             insertion_sort(nomes);
             mostrar_nomes(nomes);
-            exit(0);
+            break;
         case 4:
-            merge_sort(nomes);
+            merge_sort(nomes, 0, (QTD_LINHAS - 1));
             mostrar_nomes(nomes);
-            exit(0);
+            break;
         case 5:
-            exit(0);
+            break;
         default:
             printf("Opcao invalida!\n\n");
             break;
@@ -107,8 +107,57 @@ void insertion_sort(char nomes[][TAM_NOME]){
     }
 }
 
-void merge_sort(char nomes[][TAM_NOME]){
+void merge(char nomes[][TAM_NOME], int inicio, int meio, int fim){
+    int n1 = meio - inicio + 1;
+    int n2 = fim - meio;
 
+    char left[n1][TAM_NOME];
+    char right[n2][TAM_NOME];
+
+    int i, j, k;
+
+    for(i = 0; i < n1; i++){
+        strcpy(left[i], nomes[inicio + i]);
+    }
+    for(j = 0; j < n2; j++){
+        strcpy(right[j], nomes[meio + 1 + j]);
+    }
+
+    i = 0;
+    j = 0;
+    k = inicio;
+
+    while(i < n1 && j < n2){
+        if(strcmp(left[i], right[j]) <= 0){
+            strcpy(nomes[k], left[i]);
+            i++;
+        }else{
+            strcpy(nomes[k], right[j]);
+            j++;
+        }
+        k++;
+    }
+
+    while(i < n1){
+        strcpy(nomes[k], left[i]);
+        i++;
+        k++;
+    }
+
+    while(j < n2){
+        strcpy(nomes[k], right[j]);
+        j++;
+        k++;
+    }
+}
+
+void merge_sort(char nomes[][TAM_NOME], int inicio, int fim){
+    if(inicio < fim){
+        int meio = (inicio + fim) / 2;
+        merge_sort(nomes, inicio, meio);
+        merge_sort(nomes, (meio + 1), fim);
+        merge(nomes, inicio, meio, fim);
+    }
 }
 
 int main(){
