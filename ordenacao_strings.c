@@ -2,11 +2,11 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define TAM_NOME 100
-#define QTD_LINHAS 1000
+#define SIZE_ROW 100
+#define NUM_ROWS 1000
 
-int ler_arquivo(char* nome_arquivo, char nomes[QTD_LINHAS][TAM_NOME]){
-    FILE* arquivo = fopen(nome_arquivo, "r");
+int ler_arquivo(char* arq, char arr[NUM_ROWS][SIZE_ROW]){
+    FILE* arquivo = fopen(arq, "r");
 
     if(arquivo == NULL){
         printf("Erro ao abrir o arquivo.\n");
@@ -14,7 +14,7 @@ int ler_arquivo(char* nome_arquivo, char nomes[QTD_LINHAS][TAM_NOME]){
     }
     int i = 0;
     while(!feof(arquivo)){
-        fgets(nomes[i], TAM_NOME, arquivo);
+        fgets(arr[i], SIZE_ROW, arquivo);
         i++;
     }
 
@@ -23,13 +23,14 @@ int ler_arquivo(char* nome_arquivo, char nomes[QTD_LINHAS][TAM_NOME]){
     return 0;
 }
 
-void mostrar_nomes(char nomes[][TAM_NOME]){
-    for(int j = 0; j < QTD_LINHAS; j++){
-        printf("%s", nomes[j]);
+void mostrar_nomes(char arr[][SIZE_ROW]){
+    for(int j = 0; j < NUM_ROWS; j++){
+        printf("%s", arr[j]);
     }
+    printf("\n\n");
 }
 
-void mostrar_menu(char nomes[][TAM_NOME]){
+void mostrar_menu(char arr[][SIZE_ROW]){
     int op = 0;
 
     do{
@@ -43,20 +44,20 @@ void mostrar_menu(char nomes[][TAM_NOME]){
 
         switch(op){
         case 1:
-            bubble_sort(nomes);
-            mostrar_nomes(nomes);
+            bubble_sort(arr);
+            mostrar_nomes(arr);
             break;
         case 2:
-            selection_sort(nomes);
-            mostrar_nomes(nomes);
+            selection_sort(arr);
+            mostrar_nomes(arr);
             break;
         case 3:
-            insertion_sort(nomes);
-            mostrar_nomes(nomes);
+            insertion_sort(arr);
+            mostrar_nomes(arr);
             break;
         case 4:
-            merge_sort(nomes, 0, (QTD_LINHAS - 1));
-            mostrar_nomes(nomes);
+            merge_sort(arr, 0, (NUM_ROWS - 1));
+            mostrar_nomes(arr);
             break;
         case 5:
             break;
@@ -67,102 +68,102 @@ void mostrar_menu(char nomes[][TAM_NOME]){
     }while(op != 5);
 }
 
-void trocar(char nomes[][TAM_NOME], int i, int j){
-    char temp[TAM_NOME];
+void trocar(char arr[][SIZE_ROW], int i, int j){
+    char temp[SIZE_ROW];
 
-    strcpy(temp, nomes[i]);
-    strcpy(nomes[i], nomes[j]);
-    strcpy(nomes[j], temp);
+    strcpy(temp, arr[i]);
+    strcpy(arr[i], arr[j]);
+    strcpy(arr[j], temp);
 }
 
-void bubble_sort(char nomes[][TAM_NOME]){
-    for(int i = 0; i < (QTD_LINHAS - 1); i++){
-        for(int j = 0; j < (QTD_LINHAS - i - 1); j++){
-            if(strcmp(nomes[j], nomes[j+1]) > 0){
-                trocar(nomes, j, j+1);
+void bubble_sort(char arr[][SIZE_ROW]){
+    for(int i = 0; i < (NUM_ROWS - 1); i++){
+        for(int j = 0; j < (NUM_ROWS - i - 1); j++){
+            if(strcmp(arr[j], arr[j+1]) > 0){
+                trocar(arr, j, j+1);
             }
         }
     }
 }
 
-void selection_sort(char nomes[][TAM_NOME]){
-    for(int i = 0; i < (QTD_LINHAS - 1); i++){
-        for(int j = i + 1; j < QTD_LINHAS; j++){
-            if(strcmp(nomes[i], nomes[j]) > 0){
-                trocar(nomes, i, j);
+void selection_sort(char arr[][SIZE_ROW]){
+    for(int i = 0; i < (NUM_ROWS - 1); i++){
+        for(int j = i + 1; j < NUM_ROWS; j++){
+            if(strcmp(arr[i], arr[j]) > 0){
+                trocar(arr, i, j);
             }
         }
     }
 }
 
-void insertion_sort(char nomes[][TAM_NOME]){
+void insertion_sort(char arr[][SIZE_ROW]){
     int j = 0;
     char *key;
-    for(int i = 1; i < QTD_LINHAS; i++){
-        strcpy(key, nomes[i]);
-        for(j = i - 1; j >= 0 && (strcmp(nomes[j], key) > 0); j--){
-            strcpy(nomes[j + 1], nomes[j]);
+    for(int i = 1; i < NUM_ROWS; i++){
+        strcpy(key, arr[i]);
+        for(j = i - 1; j >= 0 && (strcmp(arr[j], key) > 0); j--){
+            strcpy(arr[j + 1], arr[j]);
         }
-        strcpy(nomes[j + 1], key);
+        strcpy(arr[j + 1], key);
     }
 }
 
-void merge(char nomes[][TAM_NOME], int inicio, int meio, int fim){
-    int n1 = meio - inicio + 1;
-    int n2 = fim - meio;
+void merge(char arr[][SIZE_ROW], int inicio, int meio, int fim){
+    int size_left = meio - inicio + 1;
+    int size_right = fim - meio;
 
-    char left[n1][TAM_NOME];
-    char right[n2][TAM_NOME];
+    char left[size_left][SIZE_ROW];
+    char right[size_right][SIZE_ROW];
 
     int i, j, k;
 
-    for(i = 0; i < n1; i++){
-        strcpy(left[i], nomes[inicio + i]);
+    for(i = 0; i < size_left; i++){
+        strcpy(left[i], arr[inicio + i]);
     }
-    for(j = 0; j < n2; j++){
-        strcpy(right[j], nomes[meio + 1 + j]);
+    for(j = 0; j < size_right; j++){
+        strcpy(right[j], arr[meio + 1 + j]);
     }
 
     i = 0;
     j = 0;
     k = inicio;
 
-    while(i < n1 && j < n2){
+    while(i < size_left && j < size_right){
         if(strcmp(left[i], right[j]) <= 0){
-            strcpy(nomes[k], left[i]);
+            strcpy(arr[k], left[i]);
             i++;
         }else{
-            strcpy(nomes[k], right[j]);
+            strcpy(arr[k], right[j]);
             j++;
         }
         k++;
     }
 
-    while(i < n1){
-        strcpy(nomes[k], left[i]);
+    while(i < size_left){
+        strcpy(arr[k], left[i]);
         i++;
         k++;
     }
 
-    while(j < n2){
-        strcpy(nomes[k], right[j]);
+    while(j < size_right){
+        strcpy(arr[k], right[j]);
         j++;
         k++;
     }
 }
 
-void merge_sort(char nomes[][TAM_NOME], int inicio, int fim){
+void merge_sort(char arr[][SIZE_ROW], int inicio, int fim){
     if(inicio < fim){
         int meio = (inicio + fim) / 2;
-        merge_sort(nomes, inicio, meio);
-        merge_sort(nomes, (meio + 1), fim);
-        merge(nomes, inicio, meio, fim);
+        merge_sort(arr, inicio, meio);
+        merge_sort(arr, (meio + 1), fim);
+        merge(arr, inicio, meio, fim);
     }
 }
 
 int main(){
     char nome_arquivo[] = "nomes2.txt";
-    char nomes[QTD_LINHAS][TAM_NOME];
+    char nomes[NUM_ROWS][SIZE_ROW];
 
     ler_arquivo(nome_arquivo, nomes);
     mostrar_menu(nomes);
