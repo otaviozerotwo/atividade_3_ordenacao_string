@@ -2,17 +2,19 @@
 #include<stdlib.h>
 #include<string.h>
 
-int ler_arquivo(char* nome_arquivo, char* nomes){
+#define TAM_NOME 100
+#define QTD_LINHAS 1000
+
+int ler_arquivo(char* nome_arquivo, char nomes[QTD_LINHAS][TAM_NOME]){
     FILE* arquivo = fopen(nome_arquivo, "r");
 
     if(arquivo == NULL){
         printf("Erro ao abrir o arquivo.\n");
         return 0;
     }
-
     int i = 0;
-    while(fgets(nomes, 100, arquivo) != NULL){
-        nomes[strcspn(nomes, "\n")] = '\0';
+    while(!feof(arquivo)){
+        fgets(nomes[i], TAM_NOME, arquivo);
         i++;
     }
 
@@ -21,11 +23,13 @@ int ler_arquivo(char* nome_arquivo, char* nomes){
     return 0;
 }
 
-void mostrar_nomes(char* nomes){
-
+void mostrar_nomes(char nomes[][TAM_NOME]){
+    for(int j = 0; j < QTD_LINHAS; j++){
+        printf("%s", nomes[j]);
+    }
 }
 
-void mostrar_menu(char* nomes){
+void mostrar_menu(char nomes[][TAM_NOME]){
     int op = 0;
 
     do{
@@ -40,15 +44,19 @@ void mostrar_menu(char* nomes){
         switch(op){
         case 1:
             bubble_sort(nomes);
+            mostrar_nomes(nomes);
             exit(0);
         case 2:
-            selection_sort();
+            selection_sort(nomes);
+            mostrar_nomes(nomes);
             exit(0);
         case 3:
-            insertion_sort();
+            insertion_sort(nomes);
+            mostrar_nomes(nomes);
             exit(0);
         case 4:
-            merge_sort();
+            merge_sort(nomes);
+            mostrar_nomes(nomes);
             exit(0);
         case 5:
             exit(0);
@@ -59,40 +67,42 @@ void mostrar_menu(char* nomes){
     }while(op != 5);
 }
 
-void bubble_sort(char* nomes){
-    char temp;
+void trocar(char nomes[][TAM_NOME], int i, int j){
+    char temp[TAM_NOME];
 
-    for(int i = 0; i < 100 - 1; i++){
-        for(int j = 0; j < 100 - i - 1; j++){
-            if(nomes[j] < nomes[j+1]){
-                temp = nomes[j+1];
-                nomes[j] = nomes[j+1];
-                nomes[j+1] = temp;
+    strcpy(temp, nomes[i]);
+    strcpy(nomes[i], nomes[j]);
+    strcpy(nomes[j], temp);
+}
+
+void bubble_sort(char nomes[][TAM_NOME]){
+    for(int i = 0; i < (QTD_LINHAS - 1); i++){
+        for(int j = 0; j < (QTD_LINHAS - i - 1); j++){
+            if(strcmp(nomes[j], nomes[j+1]) > 0){
+                trocar(nomes, j, j+1);
             }
         }
     }
 }
 
-void selection_sort(){
+void selection_sort(char nomes[][TAM_NOME]){
 
 }
 
-void insertion_sort(){
+void insertion_sort(char nomes[][TAM_NOME]){
 
 }
 
-void merge_sort(){
+void merge_sort(char nomes[][TAM_NOME]){
 
 }
 
 int main(){
-    //mostrar_menu();
     char nome_arquivo[] = "nomes2.txt";
-    char nomes[100];
+    char nomes[QTD_LINHAS][TAM_NOME];
 
     ler_arquivo(nome_arquivo, nomes);
-    //mostrar_menu(nomes);
-    mostrar_nomes(nomes);
+    mostrar_menu(nomes);
 
     return 0;
 }
