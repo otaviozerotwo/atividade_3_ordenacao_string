@@ -1,7 +1,31 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
-void mostrar_menu(){
+int ler_arquivo(char* nome_arquivo, char* nomes){
+    FILE* arquivo = fopen(nome_arquivo, "r");
+
+    if(arquivo == NULL){
+        printf("Erro ao abrir o arquivo.\n");
+        return 0;
+    }
+
+    int i = 0;
+    while(fgets(nomes, 100, arquivo) != NULL){
+        nomes[strcspn(nomes, "\n")] = '\0';
+        i++;
+    }
+
+    fclose(arquivo);
+
+    return 0;
+}
+
+void mostrar_nomes(char* nomes){
+
+}
+
+void mostrar_menu(char* nomes){
     int op = 0;
 
     do{
@@ -15,7 +39,7 @@ void mostrar_menu(){
 
         switch(op){
         case 1:
-            bubble_sort();
+            bubble_sort(nomes);
             exit(0);
         case 2:
             selection_sort();
@@ -35,8 +59,18 @@ void mostrar_menu(){
     }while(op != 5);
 }
 
-void bubble_sort(){
+void bubble_sort(char* nomes){
+    char temp;
 
+    for(int i = 0; i < 100 - 1; i++){
+        for(int j = 0; j < 100 - i - 1; j++){
+            if(nomes[j] < nomes[j+1]){
+                temp = nomes[j+1];
+                nomes[j] = nomes[j+1];
+                nomes[j+1] = temp;
+            }
+        }
+    }
 }
 
 void selection_sort(){
@@ -52,8 +86,13 @@ void merge_sort(){
 }
 
 int main(){
+    //mostrar_menu();
+    char nome_arquivo[] = "nomes2.txt";
+    char nomes[100];
 
-    mostrar_menu();
+    ler_arquivo(nome_arquivo, nomes);
+    //mostrar_menu(nomes);
+    mostrar_nomes(nomes);
 
     return 0;
 }
